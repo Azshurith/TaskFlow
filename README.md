@@ -1,8 +1,8 @@
-# 🚀 DB2UI
+# 🚀 TaskFlow
 
-> Full-stack automation dashboard built with modern technologies — designed for scale, speed, and modularity.
+> Full-stack workflow automation dashboard — scalable, modular, and built for modern development.
 
-DB2UI is a robust automation platform powered by **Node.js**, **Express**, **NuxtJS**, and **PostgreSQL**. It comes Docker-ready with **pgAdmin** for database control and **Redis** support for caching, queuing, or session management.
+**TaskFlow** is a full-stack platform that brings together a NuxtJS frontend with an ASP.NET backend, powered by PostgreSQL and Redis. It's fully Dockerized for instant environment setup, and designed to support scalable development across projects requiring queuing, caching, and user authentication.
 
 ---
 
@@ -10,8 +10,8 @@ DB2UI is a robust automation platform powered by **Node.js**, **Express**, **Nux
 
 | Layer         | Technology                            |
 |---------------|----------------------------------------|
-| **Frontend**  | NuxtJS 3 (Vue 3, Vite, SSR optional)   |
-| **Backend**   | Node.js, ExpressJS, TypeScript         |
+| **Frontend**  | NuxtJS 3 (Vue 3, Vite)                 |
+| **Backend**   | ASP.NET Core (C#)                      |
 | **Database**  | PostgreSQL + pgAdmin GUI               |
 | **Cache**     | Redis                                  |
 | **Container** | Docker + Docker Compose                |
@@ -20,13 +20,13 @@ DB2UI is a robust automation platform powered by **Node.js**, **Express**, **Nux
 
 ## 📦 Features
 
-- ✅ Modular API structure using Express + TypeScript
-- 🖥️ NuxtJS frontend with Vue 3 + Pinia support
-- 🐘 PostgreSQL with admin access via pgAdmin
-- 🔁 Redis-powered session/cache-ready setup
-- 🐳 Fully Dockerized: 1-command startup
-- 🔐 JWT Auth for secure endpoints
-- 🔌 Easy to extend with service-based jobs
+- ✅ Clean, modular ASP.NET backend
+- 🖥️ NuxtJS 3 frontend (Vue 3 + Pinia)
+- 🐘 PostgreSQL with pgAdmin for database management
+- 🔁 Redis for sessions, queuing, and caching
+- 🐳 Dockerized with fully configurable environment
+- 🔐 JWT-based authentication system
+- 🔌 Makefile CLI with custom developer commands
 
 ---
 
@@ -35,112 +35,92 @@ DB2UI is a robust automation platform powered by **Node.js**, **Express**, **Nux
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Azshurith/DB2UI.git
-cd DB2UI
+git clone https://github.com/Azshurith/TaskFlow.git
+cd TaskFlow
 ```
 
 ### 2. Create `.env` File
 
-Copy `.env.example` and configure ports, DB, JWT:
+Copy and edit the environment file:
 
 ```bash
 cp .env.example .env
 ```
 
-### 3. Start with Docker
+Set project details, ports, credentials, and Docker paths as needed.
+
+### 3. Launch with Docker
 
 ```bash
-docker-compose up -d
+make project_start
 ```
 
-Access:
-- Frontend: `http://localhost:4000`
-- Backend: `http://localhost:4001/api`
+Access your services:
+- Nuxt Frontend: `http://localhost:4000`
+- ASP.NET Backend: `http://localhost:4001`
 - pgAdmin: `http://localhost:4002`
 - Redis: `localhost:6379`
 
 ---
 
-## 🪟 Optional: Create Windows Symlink for WSL Projects
-
-To access your WSL-based project directory easily from Windows (e.g. for editors like VSCode or file explorers), you can create a symbolic link:
-
-```powershell
-# Run PowerShell as Administrator
-New-Item -ItemType SymbolicLink `
-  -Path "D:\Documents\Projects" `
-  -Target "\\wsl.localhost\Ubuntu-24.04\home\user\Projects"
-```
-
-### 🔎 Notes
-- Make sure the **target WSL path exists**.
-- This creates a Windows-accessible folder that mirrors your WSL project directory.
-- If you get a `NewItemIOError`, check if a folder already exists at the destination path.
-
----
-
-## 🗂️ Project Structure
+## 🛠️ Project Structure
 
 ```
-backend/                 # Express + TypeScript backend
-  ├── src/
-  │   ├── routes/
-  │   ├── controllers/
-  │   └── config/
-frontend/                # NuxtJS frontend (src/pages, src/components, etc.)
-.docker/                 # Dockerfiles for each service
-.env                     # Environment variables
-docker-compose.yml       # Multi-container orchestrator
-Makefile                 # Project CLI with helper commands
+backend/                  # ASP.NET backend (C#)
+frontend/                 # Nuxt 3 frontend (Vue 3)
+.docker/                  # Dockerfiles and Docker config
+.env                      # Project environment variables
+Makefile                  # CLI commands for automation
+docker-compose.yml        # Multi-container orchestration
 ```
 
 ---
 
-## 🛠️ Makefile CLI Commands
+## 🧪 Makefile CLI Commands
 
-Use `make help` to list all available commands:
+Use `make help` to view available commands:
 
-| Command            | Description                                  |
-|--------------------|----------------------------------------------|
-| `project_start`    | 🚀 Start all containers in detached mode     |
-| `project_stop`     | 🛑 Stop all running containers               |
-| `project_restart`  | 🔄 Restart all containers                    |
-| `project_destroy`  | 💣 Remove containers and volumes             |
-| `express_shell`    | 🔧 Open a shell in Express container         |
-| `express_install`  | 📦 Install backend dependencies              |
-| `express_update`   | 🔄 Update backend packages                   |
-| `express_dev`      | 🛠️ Run Express in dev mode                  |
-| `express_start`    | ▶️ Run Express in production mode            |
-| `express_build`    | 🔧 Build backend (if applicable)             |
-| `nuxt_shell`       | 🔧 Open a shell in Nuxt container            |
-| `nuxt_install`     | 📦 Install frontend dependencies             |
-| `nuxt_update`      | 🔄 Update frontend packages                  |
-| `nuxt_dev`         | 🛠️ Run Nuxt in dev mode                     |
-| `nuxt_start`       | ▶️ Run Nuxt in production mode              |
-| `nuxt_build`       | 🔧 Build frontend for production             |
-| `help`             | 📖 Show this help menu                       |
+| Command             | Description                                  |
+|---------------------|----------------------------------------------|
+| `project_start`     | 🚀 Start all containers                      |
+| `project_stop`      | 🛑 Stop all containers                       |
+| `project_restart`   | 🔄 Restart containers                        |
+| `project_destroy`   | 💣 Destroy containers and volumes            |
+| `project_cleanup`   | 🧹 Clean compiled backend artifacts          |
+| `asp_shell`         | 🔧 Shell into ASP.NET container             |
+| `asp_restore`       | 📦 Restore backend dependencies              |
+| `asp_build`         | 🔧 Build backend project                     |
+| `asp_run`           | ▶️  Run backend                              |
+| `asp_test`          | 🧪 Run backend tests                         |
+| `nuxt_shell`        | 🔧 Shell into Nuxt container                 |
+| `nuxt_install`      | 📦 Install frontend packages                 |
+| `nuxt_update`       | 🔄 Update frontend packages                 |
+| `nuxt_dev`          | 🛠️  Run frontend in dev mode               |
+| `nuxt_start`        | ▶️  Run frontend in production mode         |
+| `nuxt_build`        | 🔧 Build frontend                           |
+| `help`              | 📖 Show Makefile help menu                  |
 
 ---
 
 ## 🔐 Authentication
 
-JWT-based auth is built-in. Use:
+JWT-based authentication is integrated:
 
 ```http
-Authorization: Bearer <token>
+Authorization: Bearer <your-token-here>
 ```
 
 ---
 
 ## 🧠 Redis Use Cases
 
-- Session & login state
-- API rate-limiting
-- Cache for scraped or job data
+- User sessions
+- Background job queues
+- Temporary caching for API or DB results
 
 ---
 
-## 🛠️ Build Frontend Manually
+## 🏗️ Manual Build (Frontend)
 
 ```bash
 cd frontend
