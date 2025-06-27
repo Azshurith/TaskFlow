@@ -1,0 +1,94 @@
+services:
+  nuxt:
+    container_name: ${PROJECT_NAME}-nuxt
+    image: ${PROJECT_NAME}-nuxt:${PROJECT_NAME}-${PROJECT_VERSION}
+    build:
+      context: .
+      dockerfile: ${NUXT_DOCKERFILE}/Dockerfile
+    ports:
+      - "${NUXT_PORT}:${NUXT_PORT}"
+    environment:
+      NUXT_PORT: ${NUXT_PORT}
+      ASP_PORT: ${ASP_PORT}
+    volumes:
+      - ${NUXT_DIRECTORY}:${NUXT_WORK_DIRECTORY}
+    working_dir: ${NUXT_WORK_DIRECTORY}
+    command: sh -c "npm install && npm run dev"
+    depends_on:
+      - asp
+
+  asp:
+    container_name: ${PROJECT_NAME}-asp
+    image: ${PROJECT_NAME}-asp:${PROJECT_NAME}-${PROJECT_VERSION}
+    build:
+      context: .
+      dockerfile: ${ASP_DOCKERFILE}/Dockerfile
+    volumes:
+      - ${ASP_DIRECTORY}:${ASP_WORK_DIRECTORY}
+    ports:
+      - "${ASP_PORT}:${ASP_PORT}"
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      ASP_PORT: ${ASP_PORT}
+    working_dir: ${ASP_WORK_DIRECTORY}
+    command: sh -c "while true; do sleep 1000; done"
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: ${PROJECT_NAME}-postgres
+    image: ${PROJECT_NAME}-postgres:${PROJECT_NAME}-${PROJECT_VERSION}
+    build:
+      context: .
+      dockerfile: ${POSTGRES_DOCKERFILE}/Dockerfile
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: ${PROJECT_NAME}-pgadmin
+    image: ${PROJECT_NAME}-pgadmin:${PROJECT_NAME}-${PROJECT_VERSION}
+    build:
+      context: .
+      dockerfile: ${PGADMIN_DOCKERFILE}/Dockerfile
+    ports:
+      - "${PGADMIN_PORT}:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+  redis:
+    container_name: ${PROJECT_NAME}-redis
+    image: ${PROJECT_NAME}-redis:${PROJECT_NAME}-${PROJECT_VERSION}
+    build:
+      context: .
+      dockerfile: ${REDIS_DOCKERFILE}/Dockerfile
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - redis:/data
+
+volumes:
+  postgres:
+    name: ${PROJECT_NAME}-postgres
+    driver: local
+  pgadmin:
+    name: ${PROJECT_NAME}-pgadmin
+    driver: local
+  redis:
+    name: ${PROJECT_NAME}-redis
+    driver: local
