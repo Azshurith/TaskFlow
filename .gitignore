@@ -1,5 +1,6 @@
 .env
 .vscode
+backend/src/.vs
 backend/build
 frontend/.nuxt
 frontend/.output

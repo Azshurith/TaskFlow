@@ -1,0 +1,23 @@
+{
+  "profiles": {
+    "TaskManager": {
+      "commandName": "Project",
+      "workingDirectory": "\\\\wsl.localhost\\Ubuntu-24.04\\home\\devitrax\\Projects\\Coding\\TaskFlow\\backend\\src",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:52773;http://localhost:52774"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "launchBrowser": true,
+      "launchUrl": "https://localhost:52773",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "https://localhost:52773;http://localhost:52774"
+      },
+      "distributionName": ""
+    }
+  }
+}

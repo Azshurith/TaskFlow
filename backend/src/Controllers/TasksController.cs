@@ -45,11 +45,20 @@ namespace TaskManager.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id)
+        public async Task<IActionResult> Update(int id, [FromBody] TaskItem updatedTask)
         {
+            if (id != updatedTask.Id)
+                return BadRequest("Task ID mismatch.");
+
             var task = await _db.Tasks.FindAsync(id);
-            if (task == null) return NotFound();
-            task.IsCompleted = true;
+            if (task == null)
+                return NotFound();
+
+            // Update all relevant fields
+            task.Title = updatedTask.Title;
+            task.Description = updatedTask.Description;
+            task.IsCompleted = updatedTask.IsCompleted;
+
             await _db.SaveChangesAsync();
             return NoContent();
         }

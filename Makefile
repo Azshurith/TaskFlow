@@ -41,6 +41,12 @@ asp_run:               ## ▶️ Run .NET app
 asp_test:              ## 🧪 Run .NET tests (requires test project)
 	docker exec -it -u root ${PROJECT_NAME}-asp sh -c "cd ${ASP_WORK_DIRECTORY}/src && dotnet test"
 
+asp_migrate_add: 	   ## 🧱 Add EF migration: make asp_migrate_add name=Init
+	docker exec -it -u root ${PROJECT_NAME}-asp sh -c "export PATH=\$$PATH:/root/.dotnet/tools && cd ${ASP_WORK_DIRECTORY}/src && dotnet ef migrations add ${name} --msbuildprojectextensionspath ../build/obj/"
+
+asp_migrate_update:    ## 🧱 Apply latest EF migrations
+	docker exec -it -u root ${PROJECT_NAME}-asp sh -c "export PATH=\$$PATH:/root/.dotnet/tools && cd ${ASP_WORK_DIRECTORY}/src && dotnet ef database update --msbuildprojectextensionspath ../build/obj/"
+
 # --------------------------------------------------
 # 🖥️ Nuxt Frontend Commands
 # --------------------------------------------------
