@@ -10,16 +10,10 @@ namespace TaskManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TasksController : ControllerBase
+    public class TasksController(AppDbContext db) : ControllerBase
     {
-        private readonly AppDbContext _db;
+        private readonly AppDbContext _db = db;
 
-        public TasksController(AppDbContext db)
-        {
-            _db = db;
-        }
-
-        // ✅ GET /api/tasks?page=1&size=10
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TaskItem>>> List([FromQuery] int page = 1, [FromQuery] int size = 10)
         {
@@ -67,9 +61,13 @@ namespace TaskManager.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var task = await _db.Tasks.FindAsync(id);
-            if (task == null) return NotFound();
+
+            if (task == null)
+                return NotFound();
+
             _db.Tasks.Remove(task);
             await _db.SaveChangesAsync();
+            
             return NoContent();
         }
     }

@@ -7,18 +7,17 @@ using TaskManager.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Allow Nuxt frontend (port 3000 by default)
+// Allow Nuxt frontend (port 4000 by default)
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
         policy
-            .WithOrigins("http://localhost:4000") // Nuxt dev server
+            .WithOrigins("http://localhost:4000")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
 });
-
 
 // Add services
 builder.Services.AddControllers();
@@ -28,8 +27,7 @@ builder.Services.AddSwaggerGen();
 // Use config class for DB connection
 string connectionString = DatabaseConfig.BuildConnectionString(builder.Configuration);
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
 var app = builder.Build();
 
